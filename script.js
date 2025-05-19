@@ -1,6 +1,7 @@
 /**
  * Blackjack Game Logic
  * Based on The Venetian Resort Las Vegas Rules
+ * Mobile-optimized version
  */
 
 // Game state variables
@@ -63,8 +64,21 @@ doubleBtn.addEventListener('click', doubleDown);
 splitBtn.addEventListener('click', splitPair);
 insuranceBtn.addEventListener('click', takeInsurance);
 
+// Mobile-specific touch feedback
+document.querySelectorAll('.btn').forEach(button => {
+    button.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+    });
+    button.addEventListener('touchend', function() {
+        this.style.transform = 'scale(1)';
+    });
+});
+
 // Update balance display
 updateBalance();
+
+// Set initial max bet based on balance
+betInputEl.max = playerBalance;
 
 /**
  * Creates a new shuffled deck of cards (6 standard decks combined)
@@ -118,7 +132,7 @@ function startNewGame() {
     // Create and shuffle deck
     deck = createDeck();
     
-    // Deal initial cards
+    // Deal initial cards with shorter delays for mobile
     dealInitialCards();
     
     // Set game as active
@@ -146,7 +160,7 @@ function startNewGame() {
     
     // Check if split is available (two cards of the same rank)
     splitAvailable = (playerHand.length === 2 && getCardValue(playerHand[0]) === getCardValue(playerHand[1]));
-    if (splitAvailable) {
+    if (splitAvailable && playerBalance >= currentBet) {
         splitBtn.classList.remove('hidden');
     } else {
         splitBtn.classList.add('hidden');
@@ -162,12 +176,15 @@ function startNewGame() {
  * Resets the game state
  */
 function resetGame() {
+    // Clear hands and points
     playerHand = [];
     dealerHand = [];
     splitHands = [[], []];
     playerPoints = 0;
     dealerPoints = 0;
     splitPoints = [0, 0];
+    
+    // Clear UI elements
     dealerCardsEl.innerHTML = '';
     playerCardsEl.innerHTML = '';
     splitCards1El.innerHTML = '';
@@ -177,6 +194,8 @@ function resetGame() {
     splitPoints1El.textContent = '0';
     splitPoints2El.textContent = '0';
     resultEl.textContent = '';
+    
+    // Reset game state flags
     gameActive = false;
     isSplit = false;
     currentSplitHand = 0;
@@ -195,29 +214,35 @@ function resetGame() {
  * Deals the initial cards to the player and dealer
  */
 function dealInitialCards() {
+    // Use shorter animation times for mobile devices
+    const isMobile = window.innerWidth < 768;
+    const dealDelay = isMobile ? 200 : 300;
+    
     // Deal first card to player (face up)
     dealCard(playerHand, playerCardsEl, false);
     updatePlayerPoints();
     
     // Deal first card to dealer (face up)
-    dealCard(dealerHand, dealerCardsEl, false);
-    updateDealerPoints();
-    
-    // Deal second card to player (face up)
     setTimeout(() => {
-        dealCard(playerHand, playerCardsEl, false);
-        updatePlayerPoints();
+        dealCard(dealerHand, dealerCardsEl, false);
+        updateDealerPoints();
         
-        // Deal second card to dealer (face down)
+        // Deal second card to player (face up)
         setTimeout(() => {
-            dealCard(dealerHand, dealerCardsEl, true);
-            // Don't update dealer points for the hidden card
-        }, 300);
-    }, 300);
+            dealCard(playerHand, playerCardsEl, false);
+            updatePlayerPoints();
+            
+            // Deal second card to dealer (face down)
+            setTimeout(() => {
+                dealCard(dealerHand, dealerCardsEl, true);
+                // Don't update dealer points for the hidden card
+            }, dealDelay);
+        }, dealDelay);
+    }, dealDelay);
 }
 
 /**
- * Deal a card to a hand
+ * Deal a card to a hand with optimized animations
  */
 function dealCard(hand, containerEl, hidden) {
     const card = deck.pop();
@@ -246,11 +271,13 @@ function dealCard(hand, containerEl, hidden) {
     
     containerEl.appendChild(cardEl);
     
-    // Trigger animation
-    setTimeout(() => {
-        cardEl.classList.remove('dealing');
-        cardEl.classList.add('dealt');
-    }, 10);
+    // Use requestAnimationFrame for smoother animations
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            cardEl.classList.remove('dealing');
+            cardEl.classList.add('dealt');
+        }, 10);
+    });
     
     return cardEl;
 }
@@ -527,7 +554,7 @@ function takeInsurance() {
 }
 
 /**
- * Dealer's turn
+ * Dealer's turn with optimized timing for mobile
  */
 function dealerTurn() {
     gameActive = false;
@@ -539,6 +566,11 @@ function dealerTurn() {
     // Reveal dealer's hole card
     revealDealerCard();
     
+    // Use shorter delays on mobile
+    const isMobile = window.innerWidth < 768;
+    const decisionDelay = isMobile ? 600 : 800;
+    const initialDelay = isMobile ? 700 : 1000;
+    
     // Dealer draws cards until reaching 17 or busting
     const dealerDecision = () => {
         if (dealerPoints < 17) {
@@ -547,7 +579,7 @@ function dealerTurn() {
                 dealCard(dealerHand, dealerCardsEl, false);
                 updateDealerPoints();
                 dealerDecision(); // Recursive call for next decision
-            }, 800);
+            }, decisionDelay);
         } else {
             // Dealer stands
             determineWinner();
@@ -557,7 +589,7 @@ function dealerTurn() {
     // Start dealer decision process
     setTimeout(() => {
         dealerDecision();
-    }, 1000);
+    }, initialDelay);
 }
 
 /**
@@ -714,9 +746,14 @@ function createCardElement(card) {
 }
 
 /**
- * Update the balance display
+ * Update the balance display and bet limits
  */
 function updateBalance() {
     balanceEl.textContent = playerBalance;
     betInputEl.max = playerBalance;
+    
+    // Adjust bet amount if current value exceeds balance
+    if (parseInt(betInputEl.value) > playerBalance) {
+        betInputEl.value = playerBalance;
+    }
 }

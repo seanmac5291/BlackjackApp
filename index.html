@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blackjack Game</title>
+    <title>Casino Blackjack</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -18,58 +18,61 @@
         </header>
 
         <main>
-            <!-- Dealer's Section -->
-            <section class="player-section dealer-section">
-                <h2>Dealer's Hand <span id="dealer-points" class="points">0</span></h2>
-                <div id="dealer-cards" class="cards-container"></div>
-            </section>
+            <!-- Compact Game Layout -->
+            <div class="game-layout">
+                <!-- Dealer's Section -->
+                <section class="player-section dealer-section">
+                    <h2>Dealer <span id="dealer-points" class="points">0</span></h2>
+                    <div id="dealer-cards" class="cards-container"></div>
+                </section>
 
-            <!-- Player's Section -->
-            <section class="player-section player-own-section">
-                <h2>Player's Hand <span id="player-points" class="points">0</span></h2>
-                <div id="player-cards" class="cards-container"></div>
-                
-                <!-- Split Hands (hidden initially) -->
-                <div id="split-hands-container" class="split-hands-container hidden">
-                    <div class="split-hand">
-                        <h3>Hand 1 <span id="split-points-1" class="points">0</span></h3>
-                        <div id="split-cards-1" class="cards-container"></div>
+                <!-- Player's Section -->
+                <section class="player-section player-own-section">
+                    <h2>Player <span id="player-points" class="points">0</span></h2>
+                    <div id="player-cards" class="cards-container"></div>
+                    
+                    <!-- Split Hands (hidden initially) -->
+                    <div id="split-hands-container" class="split-hands-container hidden">
+                        <div class="split-hand">
+                            <h3>Hand 1 <span id="split-points-1" class="points">0</span></h3>
+                            <div id="split-cards-1" class="cards-container"></div>
+                        </div>
+                        <div class="split-hand">
+                            <h3>Hand 2 <span id="split-points-2" class="points">0</span></h3>
+                            <div id="split-cards-2" class="cards-container"></div>
+                        </div>
                     </div>
-                    <div class="split-hand">
-                        <h3>Hand 2 <span id="split-points-2" class="points">0</span></h3>
-                        <div id="split-cards-2" class="cards-container"></div>
-                    </div>
-                </div>
-            </section>
+                </section>
+            </div>
 
             <!-- Game Controls Section -->
             <section class="controls-section">
-                <div class="betting-controls">
-                    <div class="balance-container">
-                        <label for="balance">Balance: $</label>
-                        <span id="balance">1000</span>
+                <div class="compact-controls">
+                    <div class="betting-controls">
+                        <div class="balance-container">
+                            <label>Balance: $<span id="balance">1000</span></label>
+                        </div>
+                        <div class="bet-container">
+                            <label>Bet: $<input type="number" id="bet" min="5" max="1000" value="10" step="5"></label>
+                        </div>
                     </div>
-                    <div class="bet-container">
-                        <label for="bet">Bet Amount: $</label>
-                        <input type="number" id="bet" min="5" max="1000" value="10" step="5">
+                    
+                    <div class="game-buttons">
+                        <button id="new-game-btn" class="btn primary-btn">New Game</button>
+                        <div class="action-buttons hidden" id="action-buttons">
+                            <button id="hit-btn" class="btn action-btn">Hit</button>
+                            <button id="stand-btn" class="btn action-btn">Stand</button>
+                            <button id="double-btn" class="btn action-btn">Double</button>
+                            <button id="split-btn" class="btn action-btn">Split</button>
+                        </div>
+                        <button id="insurance-btn" class="btn secondary-btn hidden">Insurance</button>
                     </div>
-                </div>
-                
-                <div class="game-buttons">
-                    <button id="new-game-btn" class="btn primary-btn">New Game</button>
-                    <div class="action-buttons hidden" id="action-buttons">
-                        <button id="hit-btn" class="btn action-btn">Hit</button>
-                        <button id="stand-btn" class="btn action-btn">Stand</button>
-                        <button id="double-btn" class="btn action-btn">Double Down</button>
-                        <button id="split-btn" class="btn action-btn">Split</button>
-                    </div>
-                    <button id="insurance-btn" class="btn secondary-btn hidden">Insurance</button>
                 </div>
             </section>
         </main>
         
         <footer>
-            <p>© 2025 Blackjack Game - Based on The Venetian Resort Las Vegas Rules</p>
+            <p>© 2025 Blackjack Game</p>
         </footer>
     </div>
 
