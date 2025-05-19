@@ -8,6 +8,18 @@
   publish = "dist"
   autoLaunch = true
 
+# Handle static assets first
+[[redirects]]
+  from = "/*.js"
+  to = "/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*.css"
+  to = "/:splat"
+  status = 200
+
+# Then handle all other routes
 [[redirects]]
   from = "/*"
   to = "/index.html"
