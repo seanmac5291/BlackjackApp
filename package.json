@@ -1,0 +1,31 @@
+{
+  "name": "blackjack-game",
+  "version": "1.0.0",
+  "description": "Single-player Blackjack web application based on The Venetian Resort Las Vegas Rules",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "blackjack",
+    "cards",
+    "game",
+    "casino"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
