@@ -22,29 +22,12 @@ let splitAvailable = false;
 let insuranceAvailable = false;
 let insuranceTaken = false;
 
-// DOM elements
-const dealerCardsEl = document.getElementById('dealer-cards');
-const playerCardsEl = document.getElementById('player-cards');
-const splitCards1El = document.getElementById('split-cards-1');
-const splitCards2El = document.getElementById('split-cards-2');
-const dealerPointsEl = document.getElementById('dealer-points');
-const playerPointsEl = document.getElementById('player-points');
-const splitPoints1El = document.getElementById('split-points-1');
-const splitPoints2El = document.getElementById('split-points-2');
-const messageEl = document.getElementById('message');
-const resultEl = document.getElementById('result');
-const balanceEl = document.getElementById('balance');
-const betInputEl = document.getElementById('bet');
-
-// Button elements
-const newGameBtn = document.getElementById('new-game-btn');
-const hitBtn = document.getElementById('hit-btn');
-const standBtn = document.getElementById('stand-btn');
-const doubleBtn = document.getElementById('double-btn');
-const splitBtn = document.getElementById('split-btn');
-const insuranceBtn = document.getElementById('insurance-btn');
-const actionButtonsEl = document.getElementById('action-buttons');
-const splitHandsContainerEl = document.getElementById('split-hands-container');
+// DOM elements and button elements will be initialized after DOM is fully loaded
+let dealerCardsEl, playerCardsEl, splitCards1El, splitCards2El;
+let dealerPointsEl, playerPointsEl, splitPoints1El, splitPoints2El;
+let messageEl, resultEl, balanceEl, betInputEl;
+let newGameBtn, hitBtn, standBtn, doubleBtn, splitBtn, insuranceBtn;
+let actionButtonsEl, splitHandsContainerEl;
 
 // Card suits and ranks
 const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
@@ -56,29 +39,85 @@ const suitSymbols = {
     'spades': '♠'
 };
 
-// Event listeners
-newGameBtn.addEventListener('click', startNewGame);
-hitBtn.addEventListener('click', hitCard);
-standBtn.addEventListener('click', stand);
-doubleBtn.addEventListener('click', doubleDown);
-splitBtn.addEventListener('click', splitPair);
-insuranceBtn.addEventListener('click', takeInsurance);
-
-// Mobile-specific touch feedback
-document.querySelectorAll('.btn').forEach(button => {
-    button.addEventListener('touchstart', function() {
-        this.style.transform = 'scale(0.95)';
-    });
-    button.addEventListener('touchend', function() {
-        this.style.transform = 'scale(1)';
-    });
+// Initialize the game when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeGame();
 });
 
-// Update balance display
-updateBalance();
+/**
+ * Initialize the game, attach event listeners, and set up the UI
+ */
+function initializeGame() {
+    // Initialize DOM elements
+    dealerCardsEl = document.getElementById('dealer-cards');
+    playerCardsEl = document.getElementById('player-cards');
+    splitCards1El = document.getElementById('split-cards-1');
+    splitCards2El = document.getElementById('split-cards-2');
+    dealerPointsEl = document.getElementById('dealer-points');
+    playerPointsEl = document.getElementById('player-points');
+    splitPoints1El = document.getElementById('split-points-1');
+    splitPoints2El = document.getElementById('split-points-2');
+    messageEl = document.getElementById('message');
+    resultEl = document.getElementById('result');
+    balanceEl = document.getElementById('balance');
+    betInputEl = document.getElementById('bet');
 
-// Set initial max bet based on balance
-betInputEl.max = playerBalance;
+    // Button elements
+    newGameBtn = document.getElementById('new-game-btn');
+    hitBtn = document.getElementById('hit-btn');
+    standBtn = document.getElementById('stand-btn');
+    doubleBtn = document.getElementById('double-btn');
+    splitBtn = document.getElementById('split-btn');
+    insuranceBtn = document.getElementById('insurance-btn');
+    actionButtonsEl = document.getElementById('action-buttons');
+    splitHandsContainerEl = document.getElementById('split-hands-container');
+    
+    // Verify all critical elements were found
+    if (!validateElements()) {
+        console.error('Some game elements could not be found! Check the HTML structure.');
+        return;
+    }
+
+    // Attach event listeners
+    newGameBtn.addEventListener('click', startNewGame);
+    hitBtn.addEventListener('click', hitCard);
+    standBtn.addEventListener('click', stand);
+    doubleBtn.addEventListener('click', doubleDown);
+    splitBtn.addEventListener('click', splitPair);
+    insuranceBtn.addEventListener('click', takeInsurance);
+    
+    // Log successful initialization
+    console.log('Game initialized successfully');
+
+    // Mobile-specific touch feedback
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+        button.addEventListener('touchend', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+
+    // Update balance display
+    updateBalance();
+
+    // Set initial max bet based on balance
+    betInputEl.max = playerBalance;
+}
+
+/**
+ * Validate that all required DOM elements are present
+ */
+function validateElements() {
+    const requiredElements = [
+        dealerCardsEl, playerCardsEl, dealerPointsEl, playerPointsEl,
+        messageEl, resultEl, balanceEl, betInputEl, newGameBtn, hitBtn,
+        standBtn, doubleBtn, splitBtn, insuranceBtn, actionButtonsEl
+    ];
+    
+    return requiredElements.every(element => element !== null);
+}
 
 /**
  * Creates a new shuffled deck of cards (6 standard decks combined)
@@ -114,6 +153,10 @@ function shuffleDeck(deckToShuffle) {
 function startNewGame() {
     // Reset game state
     resetGame();
+    
+    // Clear previous game messages
+    messageEl.textContent = '';
+    resultEl.textContent = '';
     
     // Get bet amount
     const betAmount = parseInt(betInputEl.value);
@@ -236,9 +279,41 @@ function dealInitialCards() {
             setTimeout(() => {
                 dealCard(dealerHand, dealerCardsEl, true);
                 // Don't update dealer points for the hidden card
+                
+                // Now all cards are dealt, check for player blackjack
+                setTimeout(() => {
+                    checkForNaturalBlackjack();
+                }, dealDelay);
             }, dealDelay);
         }, dealDelay);
     }, dealDelay);
+}
+
+/**
+ * Check for natural blackjack (21 points with initial two cards)
+ */
+function checkForNaturalBlackjack() {
+    if (playerPoints === 21 && playerHand.length === 2) {
+        messageEl.textContent = 'Blackjack! You have 21 with your initial cards.';
+        
+        // Check if dealer has an Ace or 10-value card showing
+        const dealerUpCardValue = getCardValue(dealerHand[0]);
+        if (dealerUpCardValue === 10 || dealerUpCardValue === 11) {
+            // Dealer might have blackjack too, need to check
+            messageEl.textContent += ' Checking if dealer has blackjack...';
+            setTimeout(() => {
+                dealerTurn();
+            }, 1000);
+        } else {
+            // Dealer can't have blackjack, player wins immediately
+            messageEl.textContent = 'Blackjack! You win.';
+            awardWinnings(2.5); // Pay 3:2
+            endGame('player blackjack');
+        }
+        
+        // Hide action buttons since the hand is decided automatically
+        actionButtonsEl.classList.add('hidden');
+    }
 }
 
 /**
@@ -365,7 +440,7 @@ function hitCard() {
         dealCard(currentHand, currentEl, false);
         updatePlayerPoints();
         
-        // Check for bust on split hand
+        // Check for bust or 21 on split hand
         if (splitPoints[currentSplitHand] > 21) {
             messageEl.textContent = `Hand ${currentSplitHand + 1} busts!`;
             
@@ -383,6 +458,24 @@ function hitCard() {
                     dealerTurn();
                 }, 1000);
             }
+        } else if (splitPoints[currentSplitHand] === 21) {
+            messageEl.textContent = `Hand ${currentSplitHand + 1} has 21! Perfect!`;
+            
+            // Move to the next hand or dealer's turn
+            if (currentSplitHand === 0) {
+                currentSplitHand = 1;
+                setTimeout(() => {
+                    messageEl.textContent = 'Moving to Hand 2.';
+                    // Highlight the active hand
+                    document.querySelectorAll('.split-hand')[0].style.opacity = '0.7';
+                    document.querySelectorAll('.split-hand')[1].style.opacity = '1';
+                }, 1000);
+            } else {
+                // Both hands played, move to dealer's turn
+                setTimeout(() => {
+                    dealerTurn();
+                }, 1000);
+            }
         }
     } else {
         // Regular (non-split) hand
@@ -393,6 +486,14 @@ function hitCard() {
         if (playerPoints > 21) {
             messageEl.textContent = 'Bust! You lose.';
             endGame('dealer');
+        } 
+        // Check if player hits 21 exactly
+        else if (playerPoints === 21) {
+            messageEl.textContent = 'You have 21! Perfect!';
+            // Automatically stand with perfect 21
+            setTimeout(() => {
+                dealerTurn();
+            }, 1000);
         }
     }
 }
@@ -701,12 +802,18 @@ function determineWinnerForSplitHand(handIndex) {
  * Award winnings to player
  */
 function awardWinnings(multiplier, splitHandIndex = -1) {
-    const winnings = currentBet * multiplier;
-    playerBalance += winnings;
+    // Calculate total amount to return to player (bet + winnings)
+    const totalReturn = currentBet * multiplier;
+    
+    // Add winnings to player balance
+    playerBalance += totalReturn;
     updateBalance();
     
+    // For regular (non-split) hands, show winnings amount
     if (splitHandIndex === -1) {
-        resultEl.textContent = `You won $${winnings - currentBet}!`;
+        // Winnings are what the player receives minus their original bet
+        const actualWinnings = totalReturn - currentBet;
+        resultEl.textContent = `You won $${actualWinnings}!`;
     }
 }
 
