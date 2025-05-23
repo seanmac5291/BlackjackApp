@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <!-- Main chip circle -->
+  <circle cx="40" cy="40" r="36" fill="#e6b142" stroke="#fff" stroke-width="1"/>
+  <circle cx="40" cy="40" r="32" fill="#e6b142" stroke="#fff" stroke-width="0.5"/>
+  
+  <!-- Edge pattern -->
+  <g fill="none" stroke="#ffffff" stroke-width="0.8">
+    <circle cx="40" cy="40" r="36" />
+    <path d="M40,4 L40,76" />
+    <path d="M4,40 L76,40" />
+    <path d="M15,15 L65,65" />
+    <path d="M15,65 L65,15" />
+  </g>
+  
+  <!-- Inner circle -->
+  <circle cx="40" cy="40" r="28" fill="#d4af37" stroke="#ffffff" stroke-width="0.5" />
+  
+  <!-- Center text -->
+  <text x="40" y="45" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">10</text>
+</svg>

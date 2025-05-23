@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="80" viewBox="0 0 200 80">
+  <!-- Golden arc -->
+  <path d="M20,60 A 80,80 0 0,1 180,60" fill="none" stroke="#d4af37" stroke-width="3" />
+  
+  <!-- Text -->
+  <text x="100" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#d4af37">ROYAL FLUSH</text>
+  <text x="100" y="70" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#e6b142">CASINO</text>
+  
+  <!-- Card suits -->
+  <text x="40" y="40" font-size="16" fill="#e41e3a">♥</text>
+  <text x="160" y="40" font-size="16" fill="#e41e3a">♦</text>
+  <text x="30" y="70" font-size="16" fill="#1a1a1a">♣</text>
+  <text x="170" y="70" font-size="16" fill="#1a1a1a">♠</text>
+</svg>
