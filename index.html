@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casino Blackjack</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Blackjack</h1>
+            <h1><i class="fas fa-crown"></i> Blackjack <i class="fas fa-crown"></i></h1>
             <div class="game-info">
                 <div id="message">Place your bet and start a new game</div>
                 <div id="result"></div>
@@ -50,29 +51,29 @@
                 <div class="compact-controls">
                     <div class="betting-controls">
                         <div class="balance-container">
-                            <label>Balance: $<span id="balance">1000</span></label>
+                            <label><i class="fas fa-coins"></i> Balance: $<span id="balance">1000</span></label>
                         </div>
                         <div class="bet-container">
-                            <label>Bet: $<input type="number" id="bet" min="5" max="1000" value="10" step="5"></label>
+                            <label><i class="fas fa-money-bill-wave"></i> Bet: $<input type="number" id="bet" min="5" max="1000" value="10" step="5"></label>
                         </div>
                     </div>
                     
                     <div class="game-buttons">
-                        <button id="new-game-btn" class="btn primary-btn">New Game</button>
+                        <button id="new-game-btn" class="btn primary-btn"><i class="fas fa-play"></i> New Game</button>
                         <div class="action-buttons hidden" id="action-buttons">
-                            <button id="hit-btn" class="btn action-btn">Hit</button>
-                            <button id="stand-btn" class="btn action-btn">Stand</button>
-                            <button id="double-btn" class="btn action-btn">Double</button>
-                            <button id="split-btn" class="btn action-btn">Split</button>
+                            <button id="hit-btn" class="btn action-btn"><i class="fas fa-hand-point-up"></i> Hit</button>
+                            <button id="stand-btn" class="btn action-btn"><i class="fas fa-hand-paper"></i> Stand</button>
+                            <button id="double-btn" class="btn action-btn"><i class="fas fa-dollar-sign"></i> Double</button>
+                            <button id="split-btn" class="btn action-btn"><i class="fas fa-columns"></i> Split</button>
                         </div>
-                        <button id="insurance-btn" class="btn secondary-btn hidden">Insurance</button>
+                        <button id="insurance-btn" class="btn secondary-btn hidden"><i class="fas fa-shield-alt"></i> Insurance</button>
                     </div>
                 </div>
             </section>
         </main>
         
         <footer>
-            <p>© 2025 Blackjack Game</p>
+            <p>&copy; 2025 Casino Blackjack <i class="fas fa-dice"></i> All rights reserved</p>
         </footer>
     </div>
 
