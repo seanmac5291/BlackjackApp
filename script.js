@@ -184,6 +184,9 @@ function startNewGame() {
     // Show action buttons
     actionButtonsEl.classList.remove('hidden');
     
+    // Set active player
+    document.querySelector('.player-own-section').classList.add('active-player');
+    
     // Check for dealer blackjack possibility (if dealer's up card is an Ace)
     if (dealerHand[0].rank === 'A') {
         insuranceAvailable = true;
@@ -246,6 +249,11 @@ function resetGame() {
     splitAvailable = false;
     insuranceAvailable = false;
     insuranceTaken = false;
+    
+    // Reset active player highlighting
+    document.querySelectorAll('.player-section').forEach(section => {
+        section.classList.remove('active-player');
+    });
     
     // Hide buttons
     actionButtonsEl.classList.add('hidden');
@@ -663,6 +671,12 @@ function dealerTurn() {
     // Hide action buttons
     actionButtonsEl.classList.add('hidden');
     insuranceBtn.classList.add('hidden');
+    
+    // Update active player visual indicator
+    document.querySelectorAll('.player-section').forEach(section => {
+        section.classList.remove('active-player');
+    });
+    document.querySelector('.dealer-section').classList.add('active-player');
     
     // Reveal dealer's hole card
     revealDealerCard();
