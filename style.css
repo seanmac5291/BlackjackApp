@@ -6,7 +6,7 @@
     --accent-color: #e6b142;
     --gold-accent: #d4af37;
     --button-primary: linear-gradient(to bottom, #d4af37, #aa8c2c);
-    --button-action: linear-gradient(to bottom, #b22222, #8b0000);
+    --button-action: linear-gradient(to bottom, #228b22, #006400);
     --button-secondary: linear-gradient(to bottom, #444444, #222222);
     --table-border: #1a541b;
     --table-felt: #156e1c;
@@ -234,12 +234,12 @@ h3 {
 .card.hidden-card {
     background-color: #ffffff;
     background-image: 
-        linear-gradient(135deg, #b22222 25%, transparent 25%),
-        linear-gradient(225deg, #b22222 25%, transparent 25%),
-        linear-gradient(315deg, #b22222 25%, transparent 25%),
-        linear-gradient(45deg, #b22222 25%, transparent 25%);
+        linear-gradient(135deg, #228b22 25%, transparent 25%),
+        linear-gradient(225deg, #228b22 25%, transparent 25%),
+        linear-gradient(315deg, #228b22 25%, transparent 25%),
+        linear-gradient(45deg, #228b22 25%, transparent 25%);
     background-size: 10px 10px;
-    border: 1px solid #8b0000;
+    border: 1px solid #006400;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
@@ -489,8 +489,8 @@ h3 {
 }
 
 .action-btn {
-    background: linear-gradient(to bottom, #d33, #b22222);
-    border: 1px solid #8b0000;
+    background: linear-gradient(to bottom, #228b22, #006400);
+    border: 1px solid #006400;
     flex-grow: 1;
     max-width: 120px;
 }
