@@ -403,7 +403,7 @@ h3 {
     left: 0;
     width: 20px;
     height: 20px;
-    background: linear-gradient(to bottom, #dc143c, #8b0000);
+    background: linear-gradient(to bottom, #228b22, #006400);
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
